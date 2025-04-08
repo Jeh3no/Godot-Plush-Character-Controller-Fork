@@ -1,18 +1,28 @@
-[gd_scene load_steps=20 format=3 uid="uid://bgkmxyw21pc1m"]
+[gd_scene load_steps=28 format=3 uid="uid://bgkmxyw21pc1m"]
 
-[ext_resource type="Script" uid="uid://de2sqbhiahmo6" path="res://components/player/player.gd" id="1_ms4x1"]
+[ext_resource type="Script" uid="uid://de2sqbhiahmo6" path="res://components/player/StateMachine/player_character_script.gd" id="1_ms4x1"]
 [ext_resource type="PackedScene" uid="uid://dmyrflud401tg" path="res://components/godot_plush/godot_plush_skin.tscn" id="2_mtsks"]
 [ext_resource type="PackedScene" uid="uid://c0b71d2b1hdp6" path="res://components/orbit_control/orbit_view.tscn" id="3_hcr6r"]
+[ext_resource type="Script" uid="uid://3h8kirrnujiv" path="res://components/player/vfx/particles_manager_script.gd" id="3_v44tt"]
 [ext_resource type="Material" uid="uid://fkuklawrv3wp" path="res://components/player/vfx/dust_mat.tres" id="4_j7qt1"]
 [ext_resource type="AudioStream" uid="uid://b7q12qmsksbc7" path="res://assets/sounds/footstep_concrete_000.ogg" id="5_8ixl8"]
 [ext_resource type="AudioStream" uid="uid://c6unhc5lontfn" path="res://assets/sounds/footstep_concrete_001.ogg" id="6_nlp36"]
 [ext_resource type="AudioStream" uid="uid://byg4lkp3ws8kt" path="res://assets/sounds/footstep_concrete_002.ogg" id="7_4283i"]
 [ext_resource type="AudioStream" uid="uid://bly24bd3apvev" path="res://assets/sounds/jingles_SAX15.ogg" id="8_s241m"]
+[ext_resource type="Script" uid="uid://sca7ypsol83f" path="res://components/player/StateMachine/state_machine_script.gd" id="9_pxnim"]
+[ext_resource type="Script" uid="uid://stil4xkf3tk0" path="res://components/player/StateMachine/idle_state_script.gd" id="10_wmnke"]
+[ext_resource type="Script" uid="uid://blt7dest23fk0" path="res://components/player/StateMachine/walk_state_script.gd" id="11_v44tt"]
+[ext_resource type="Script" uid="uid://5gk47o641xgt" path="res://components/player/StateMachine/run_state_script.gd" id="12_l1d2p"]
+[ext_resource type="Script" uid="uid://dvu58wf01wils" path="res://components/player/StateMachine/jump_state_script.gd" id="13_pdxi8"]
+[ext_resource type="Script" uid="uid://bh3rdvokmrar1" path="res://components/player/StateMachine/inair_state_script.gd" id="14_8rpwc"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_bv0o5"]
-friction = 0.5
+[sub_resource type="Curve" id="Curve_v44tt"]
+_data = [Vector2(0, 0.271098), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xhngq"]
+[sub_resource type="Curve" id="Curve_l1d2p"]
+_data = [Vector2(0, 0.256069), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
 
 [sub_resource type="Curve" id="Curve_wrw8f"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -60,23 +70,69 @@ random_pitch = 1.2
 streams_count = 1
 stream_0/stream = ExtResource("8_s241m")
 
-[node name="Player" type="RigidBody3D"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xhngq"]
+
+[node name="Player" type="CharacterBody3D"]
+collision_mask = 2
 axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
-physics_material_override = SubResource("PhysicsMaterial_bv0o5")
-can_sleep = false
-lock_rotation = true
-custom_integrator = true
-contact_monitor = true
-max_contacts_reported = 8
 script = ExtResource("1_ms4x1")
-jump_height = 3.0
+walk_speed = 5.0
+walk_accel = 8.0
+walk_deccel = 7.5
+run_speed = 9.0
+run_accel = 3.5
+run_deccel = 6.5
+continious_run = true
+jump_height = 2.6
+jump_time_to_peak = 0.32
+jump_time_to_descent = 0.26
+jump_cooldown = 0.2
+coyote_jump_cooldown = 0.2
+in_air_move_speed = SubResource("Curve_v44tt")
+in_air_accel = SubResource("Curve_l1d2p")
+moveForwardAction = "up"
+moveBackwardAction = "down"
+moveLeftAction = "left"
+moveRightAction = "right"
+runAction = "run"
+jumpAction = "jump"
+model_rot_speed = 6.5
 
 [node name="VisualRoot" type="Node3D" parent="."]
 unique_name_in_owner = true
 
 [node name="GodotPlushSkin" parent="VisualRoot" instance=ExtResource("2_mtsks")]
+
+[node name="ParticlesManager" type="Node3D" parent="VisualRoot"]
+unique_name_in_owner = true
+script = ExtResource("3_v44tt")
+
+[node name="MovementDust" type="GPUParticles3D" parent="VisualRoot"]
+unique_name_in_owner = true
+material_override = ExtResource("4_j7qt1")
+cast_shadow = 0
+lifetime = 0.8
+process_material = SubResource("ParticleProcessMaterial_dhnoe")
+draw_pass_1 = SubResource("QuadMesh_bw4i7")
+
+[node name="AudioRoot" type="Node3D" parent="."]
+
+[node name="FootStepAudio" type="AudioStreamPlayer3D" parent="AudioRoot"]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_sxclc")
+max_polyphony = 3
+
+[node name="ImpactAudio" type="AudioStreamPlayer3D" parent="AudioRoot"]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_3vpnr")
+volume_db = 5.0
+max_polyphony = 3
+
+[node name="WaveAudio" type="AudioStreamPlayer3D" parent="AudioRoot"]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_fvg16")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true
@@ -85,26 +141,34 @@ shape = SubResource("CapsuleShape3D_xhngq")
 
 [node name="OrbitView" parent="." instance=ExtResource("3_hcr6r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_mask = 2
 
-[node name="MovementDust" type="GPUParticles3D" parent="."]
-unique_name_in_owner = true
-material_override = ExtResource("4_j7qt1")
-cast_shadow = 0
-lifetime = 0.8
-process_material = SubResource("ParticleProcessMaterial_dhnoe")
-draw_pass_1 = SubResource("QuadMesh_bw4i7")
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("9_pxnim")
+initial_state = NodePath("IdleState")
 
-[node name="FootStepAudio" type="AudioStreamPlayer3D" parent="."]
-unique_name_in_owner = true
-stream = SubResource("AudioStreamRandomizer_sxclc")
-max_polyphony = 3
+[node name="IdleState" type="Node" parent="StateMachine"]
+script = ExtResource("10_wmnke")
+metadata/_custom_type_script = "uid://stil4xkf3tk0"
 
-[node name="ImpactAudio" type="AudioStreamPlayer3D" parent="."]
-unique_name_in_owner = true
-stream = SubResource("AudioStreamRandomizer_3vpnr")
-volume_db = 5.0
-max_polyphony = 3
+[node name="WalkState" type="Node" parent="StateMachine"]
+script = ExtResource("11_v44tt")
+metadata/_custom_type_script = "uid://blt7dest23fk0"
 
-[node name="WaveAudio" type="AudioStreamPlayer3D" parent="."]
-unique_name_in_owner = true
-stream = SubResource("AudioStreamRandomizer_fvg16")
+[node name="RunState" type="Node" parent="StateMachine"]
+script = ExtResource("12_l1d2p")
+metadata/_custom_type_script = "uid://5gk47o641xgt"
+
+[node name="JumpState" type="Node" parent="StateMachine"]
+script = ExtResource("13_pdxi8")
+metadata/_custom_type_script = "uid://dvu58wf01wils"
+
+[node name="InairState" type="Node" parent="StateMachine"]
+script = ExtResource("14_8rpwc")
+metadata/_custom_type_script = "uid://bh3rdvokmrar1"
+
+[node name="Raycasts" type="Node3D" parent="."]
+
+[node name="FloorRaycast" type="RayCast3D" parent="Raycasts"]
+target_position = Vector3(0, -2, 0)
+collision_mask = 2

@@ -1,35 +1,6 @@
 extends RigidBody3D
 
-@export var jump_height : float = 2.5
-@export var jump_time_to_peak : float = 0.4
-@export var jump_time_to_descent : float = 0.35
-
-@onready var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0
-@onready var jump_gravity : float = ((-2.0 * jump_height) / (jump_time_to_peak * jump_time_to_peak)) * -1.0
-@onready var fall_gravity : float = ((-2.0 * jump_height) / (jump_time_to_descent * jump_time_to_descent)) * -1.0
-
-@export var base_speed = 4.5
-@export var run_speed = 8.0
-
-@onready var visual_root = %VisualRoot
-@onready var godot_plush_skin = $VisualRoot/GodotPlushSkin
-@onready var movement_dust = %MovementDust
-@onready var foot_step_audio = %FootStepAudio
-@onready var impact_audio = %ImpactAudio
-@onready var wave_audio = %WaveAudio
-@onready var collision_shape_3d = %CollisionShape3D
-
-const JUMP_PARTICLES_SCENE = preload("./vfx/jump_particles.tscn")
-const LAND_PARTICLES_SCENE = preload("./vfx/land_particles.tscn")
-
-var movement_input : Vector2 = Vector2.ZERO
-var target_angle : float = 0.0
-var last_movement_input : Vector2 = Vector2.ZERO
-
 var ragdoll : bool = false : set = _set_ragdoll
-
-var _is_on_floor : bool = false
-var _was_on_floor : bool = false
 
 # The “_integrate_forces” method is a quick translation of the integration of the character's body movements.
 # This code is not optimal; perhaps “move_and_collide” should be used to check is_on_floor.
@@ -68,7 +39,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D):
 
 	if is_moving:
 		godot_plush_skin.set_state("run" if is_running else "walk")
-		var speed = run_speed if is_running else base_speed
+		var speed = run_speed if is_running else walk_speed
 		vel_2d += movement_input * speed * 8.0 * state.step
 		vel_2d = vel_2d.limit_length(speed)
 		state.linear_velocity.x = vel_2d.x
@@ -104,7 +75,7 @@ func _integrate_forces(state : PhysicsDirectBodyState3D):
 
 	# Add air damp when not moving
 	if !_is_on_floor && !is_moving:
-		vel_2d = vel_2d.move_toward(Vector2.ZERO, base_speed * state.step)
+		vel_2d = vel_2d.move_toward(Vector2.ZERO, walk_speed * state.step)
 		linear_velocity.x = vel_2d.x
 		linear_velocity.z = vel_2d.y
 

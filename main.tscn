@@ -1,10 +1,7 @@
-[gd_scene load_steps=15 format=3 uid="uid://cla33c2qqx78a"]
+[gd_scene load_steps=12 format=3 uid="uid://cla33c2qqx78a"]
 
 [ext_resource type="PackedScene" uid="uid://bgkmxyw21pc1m" path="res://components/player/player.tscn" id="1_gygqy"]
 [ext_resource type="Material" uid="uid://coy4nf1ts2u0q" path="res://assets/materials/grid_mat.tres" id="2_p8i8x"]
-[ext_resource type="PackedScene" uid="uid://dmyrflud401tg" path="res://components/godot_plush/godot_plush_skin.tscn" id="3_h2yge"]
-[ext_resource type="Script" uid="uid://b3umwph21qtwy" path="res://components/spawner.gd" id="4_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://cpnrk75buh8lt" path="res://components/ball/ball.tscn" id="5_lquwl"]
 
 [sub_resource type="Environment" id="Environment_0aoev"]
 background_mode = 1
@@ -57,8 +54,11 @@ shadow_enabled = true
 directional_shadow_max_distance = 20.0
 
 [node name="Player" parent="." instance=ExtResource("1_gygqy")]
+in_air_move_speed = null
+in_air_accel = null
 
 [node name="Ground" type="StaticBody3D" parent="."]
+collision_layer = 2
 metadata/_edit_lock_ = true
 metadata/_edit_group_ = true
 
@@ -73,6 +73,7 @@ skeleton = NodePath("../..")
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
 material_override = ExtResource("2_p8i8x")
 use_collision = true
+collision_layer = 2
 
 [node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 1, -7)
@@ -118,38 +119,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2, -6)
 polygon = PackedVector2Array(0, 0, 0, 2, 6, 0)
 depth = 6.0
 
-[node name="GodotPlushSkin" parent="." instance=ExtResource("3_h2yge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 4, -5)
-ragdoll = true
-
-[node name="GodotPlushSkin2" parent="." instance=ExtResource("3_h2yge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 6, -5)
-ragdoll = true
-
-[node name="GodotPlushSkin3" parent="." instance=ExtResource("3_h2yge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 8, -5)
-ragdoll = true
-
-[node name="GodotPlushSkin4" parent="." instance=ExtResource("3_h2yge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 10, -5)
-ragdoll = true
-
-[node name="GodotPlushSkin5" parent="." instance=ExtResource("3_h2yge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 12, -5)
-ragdoll = true
-
-[node name="GodotPlushSkin6" parent="." instance=ExtResource("3_h2yge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 14, -5)
-ragdoll = true
-
-[node name="GodotPlushSkin7" parent="." instance=ExtResource("3_h2yge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 16, -5)
-ragdoll = true
-
-[node name="GodotPlushSkin8" parent="." instance=ExtResource("3_h2yge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 18, -5)
-ragdoll = true
-
 [node name="Balance" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 6, -16)
 
@@ -160,6 +129,7 @@ mesh = SubResource("PrismMesh_h2yge")
 
 [node name="RigidBody3D" type="RigidBody3D" parent="Balance"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+collision_layer = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Balance/RigidBody3D"]
 shape = SubResource("BoxShape3D_h2yge")
@@ -176,6 +146,7 @@ angular_limit/upper = 0.174533
 angular_limit/lower = -0.174533
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Balance"]
+collision_layer = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Balance/StaticBody3D"]
 shape = SubResource("SphereShape3D_h2yge")
@@ -184,8 +155,8 @@ shape = SubResource("SphereShape3D_h2yge")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0, 5)
 
 [node name="Boundary" type="StaticBody3D" parent="Ballpit"]
-collision_layer = 2
-collision_mask = 2
+collision_layer = 0
+collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ballpit/Boundary"]
 transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, -5, 0, 0)
@@ -205,7 +176,3 @@ shape = SubResource("WorldBoundaryShape3D_h2yge")
 
 [node name="Spawner" type="Marker3D" parent="Ballpit"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
-script = ExtResource("4_1bvp3")
-spawnable_objects = Array[PackedScene]([ExtResource("5_lquwl")])
-size = Vector3(4, 2, 4)
-max_spawnable = 600
