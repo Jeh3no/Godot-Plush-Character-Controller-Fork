@@ -9,8 +9,17 @@ collision_mask = 0
 shape = SubResource("SphereShape3D_wgugf")
 spring_length = 8.0
 script = ExtResource("1_hg1yw")
+mouseSens = 0.0025
 min_limit_x = -1.39626
 max_limit_x = 0.174533
+pan_rotation_val = 2.6
+max_zoom_val = 30.0
+min_zoom_val = 3.0
+zoom_speed = 30.0
+mouse_mode_action = "mouse_mode"
+cam_zoom_in_action = "zoom_in"
+cam_zoom_out_action = "zoom_out"
 
 [node name="Camera3D" type="Camera3D" parent="."]
+unique_name_in_owner = true
 fov = 50.0

@@ -6,7 +6,6 @@ extends Node3D
 @onready var state_machine : AnimationNodeStateMachinePlayback = animation_tree.get("parameters/StateMachine/playback")
 
 @export var ragdoll : bool = false : set = set_ragdoll
-var tilt : float = 0.0 : set = set_tilt
 var squash_and_stretch = 1.0 : set = set_squash_and_stretch
 
 signal footstep(intensity : float)
@@ -22,19 +21,14 @@ func set_ragdoll(value : bool) -> void:
 	animation_tree.active = !ragdoll
 	if ragdoll: physical_bone_simulator_3d.physical_bones_start_simulation()
 	else: physical_bone_simulator_3d.physical_bones_stop_simulation()
-
-func set_tilt(value : float) -> void:
-	tilt = clamp(value, -1.0, 1.0)
-	animation_tree.set("parameters/AddTilt/add_amount", abs(tilt))
-	animation_tree.set("parameters/TiltAmount/blend_position", tilt)
-
+	
 func set_state(state_name : String) -> void:
 	state_machine.travel(state_name)
-
+	
 func wave() -> void:
 	waved.emit()
 	animation_tree.set("parameters/WaveOneShot/request", true)
-
+	
 func is_waving() -> bool:
 	return animation_tree.get("parameters/WaveOneShot/active")
 	

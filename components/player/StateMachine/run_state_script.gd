@@ -21,6 +21,7 @@ func verifications():
 	if cR.jump_cooldown > 0.0: cR.jump_cooldown = -1.0
 	if cR.nb_jumps_in_air_allowed < cR.nb_jumps_in_air_allowed_ref: cR.nb_jumps_in_air_allowed = cR.nb_jumps_in_air_allowed_ref
 	if cR.coyote_jump_cooldown < cR.coyote_jump_cooldown_ref: cR.coyote_jump_cooldown = cR.coyote_jump_cooldown_ref
+	if cR.has_cut_jump: cR.has_cut_jump = false
 	if !cR.movement_dust.emitting: cR.movement_dust.emitting = true
 	
 func update(_delta : float):
@@ -47,7 +48,7 @@ func check_if_floor():
 			transitioned.emit(self, "JumpState")
 			
 func input_management():
-	if Input.is_action_just_pressed(cR.jumpAction):
+	if Input.is_action_pressed(cR.jumpAction) if cR.auto_jump else Input.is_action_just_pressed(cR.jumpAction) :
 		transitioned.emit(self, "JumpState")
 		
 	if cR.continious_run:
@@ -60,6 +61,14 @@ func input_management():
 		if !Input.is_action_pressed(cR.runAction):
 			cR.walk_or_run = "WalkState"
 			transitioned.emit(self, "WalkState")
+			
+	if Input.is_action_just_pressed("wave"):
+		if !cR.godot_plush_skin.is_waving(): 
+			transitioned.emit(self, "WaveState")
+			
+	if Input.is_action_just_pressed("ragdoll"):
+		if !cR.godot_plush_skin.ragdoll:
+			transitioned.emit(self, "RagdollState")
 		
 		
 func move(delta : float):

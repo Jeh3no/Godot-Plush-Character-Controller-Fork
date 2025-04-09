@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bgkmxyw21pc1m"]
+[gd_scene load_steps=30 format=3 uid="uid://bgkmxyw21pc1m"]
 
 [ext_resource type="Script" uid="uid://de2sqbhiahmo6" path="res://components/player/StateMachine/player_character_script.gd" id="1_ms4x1"]
 [ext_resource type="PackedScene" uid="uid://dmyrflud401tg" path="res://components/godot_plush/godot_plush_skin.tscn" id="2_mtsks"]
@@ -15,6 +15,8 @@
 [ext_resource type="Script" uid="uid://5gk47o641xgt" path="res://components/player/StateMachine/run_state_script.gd" id="12_l1d2p"]
 [ext_resource type="Script" uid="uid://dvu58wf01wils" path="res://components/player/StateMachine/jump_state_script.gd" id="13_pdxi8"]
 [ext_resource type="Script" uid="uid://bh3rdvokmrar1" path="res://components/player/StateMachine/inair_state_script.gd" id="14_8rpwc"]
+[ext_resource type="Script" uid="uid://b5rmfygi6oora" path="res://components/player/StateMachine/wave_state_script.gd" id="16_l1d2p"]
+[ext_resource type="Script" uid="uid://d2tif6xsjkwnw" path="res://components/player/StateMachine/ragdoll_state_script.gd" id="17_pdxi8"]
 
 [sub_resource type="Curve" id="Curve_v44tt"]
 _data = [Vector2(0, 0.271098), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -84,11 +86,12 @@ walk_deccel = 7.5
 run_speed = 9.0
 run_accel = 3.5
 run_deccel = 6.5
-continious_run = true
-jump_height = 2.6
-jump_time_to_peak = 0.32
-jump_time_to_descent = 0.26
+jump_height = 3.0
+jump_time_to_peak = 0.35
+jump_time_to_descent = 0.29
+jump_cut_multiplier = 0.5
 jump_cooldown = 0.2
+nb_jumps_in_air_allowed = 1
 coyote_jump_cooldown = 0.2
 in_air_move_speed = SubResource("Curve_v44tt")
 in_air_accel = SubResource("Curve_l1d2p")
@@ -99,6 +102,8 @@ moveRightAction = "right"
 runAction = "run"
 jumpAction = "jump"
 model_rot_speed = 6.5
+ragdoll_gravity = 24.0
+ragdoll_on_floor_only = true
 
 [node name="VisualRoot" type="Node3D" parent="."]
 unique_name_in_owner = true
@@ -166,6 +171,14 @@ metadata/_custom_type_script = "uid://dvu58wf01wils"
 [node name="InairState" type="Node" parent="StateMachine"]
 script = ExtResource("14_8rpwc")
 metadata/_custom_type_script = "uid://bh3rdvokmrar1"
+
+[node name="WaveState" type="Node" parent="StateMachine"]
+script = ExtResource("16_l1d2p")
+metadata/_custom_type_script = "uid://b5rmfygi6oora"
+
+[node name="RagdollState" type="Node" parent="StateMachine"]
+script = ExtResource("17_pdxi8")
+metadata/_custom_type_script = "uid://d2tif6xsjkwnw"
 
 [node name="Raycasts" type="Node3D" parent="."]
 

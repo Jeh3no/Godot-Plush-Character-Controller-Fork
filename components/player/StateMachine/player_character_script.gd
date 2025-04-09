@@ -28,6 +28,8 @@ var walk_or_run : String = "WalkState" #keep in memory if play char was walking 
 @export var jump_time_to_peak : float
 @export var jump_time_to_descent : float
 @onready var jump_velocity : float = ((2.0 * jump_height) / jump_time_to_peak) * -1.0
+var has_cut_jump : bool = false
+@export var jump_cut_multiplier : float
 @export var jump_cooldown : float
 var jump_cooldown_ref : float 
 @export var nb_jumps_in_air_allowed : int 
@@ -37,6 +39,7 @@ var buffered_jump : bool = false
 @export var coyote_jump_cooldown : float
 var coyote_jump_cooldown_ref : float
 var coyote_jump_on : bool = false
+@export var auto_jump : bool = false
 
 @export_group("In air variables")
 @export var in_air_move_speed : Curve
@@ -56,6 +59,10 @@ var coyote_jump_on : bool = false
 
 @export_group("Model variables")
 @export var model_rot_speed : float
+var is_waving : bool = false
+@export var wave_on_floor_only : bool = false
+@export var ragdoll_gravity : float
+@export var ragdoll_on_floor_only : bool = false
 
 #references variables
 @onready var visual_root = %VisualRoot
@@ -94,9 +101,7 @@ func _ready():
 func _process(delta: float):
 	modify_model_orientation(delta)
 	
-	global_input_actions()
-	
-	print(jump_cooldown)
+	#print(state_machine.curr_state_name)
 	
 func _physics_process(_delta : float):
 	modify_physics_properties()
@@ -108,9 +113,6 @@ func modify_model_orientation(delta : float):
 		var target_angle = -move_dir.orthogonal().angle()
 		visual_root.rotation.y = rotate_toward(visual_root.rotation.y, target_angle, model_rot_speed * delta)
 		
-func global_input_actions():
-	if Input.is_action_just_pressed("ragdoll"): godot_plush_skin.ragdoll = !godot_plush_skin.ragdoll
-	
 func modify_physics_properties():
 	last_frame_position = position #get play char position every frame
 	last_frame_velocity = velocity #get play char velocity every frame
