@@ -109,9 +109,14 @@ func _physics_process(_delta : float):
 	move_and_slide()
 	
 func modify_model_orientation(delta : float):
-	if move_dir != Vector2.ZERO:
-		var target_angle = -move_dir.orthogonal().angle()
-		visual_root.rotation.y = rotate_toward(visual_root.rotation.y, target_angle, model_rot_speed * delta)
+	var dir_target_angle : float
+	
+	if cam_holder.cam_aimed:
+		dir_target_angle = (cam_holder.cam.global_rotation.y) + PI
+		visual_root.rotation.y = rotate_toward(visual_root.rotation.y, dir_target_angle, model_rot_speed * delta)
+	elif !cam_holder.cam_aimed and move_dir != Vector2.ZERO:
+		dir_target_angle = -move_dir.orthogonal().angle()
+		visual_root.rotation.y = rotate_toward(visual_root.rotation.y, dir_target_angle, model_rot_speed * delta)
 		
 func modify_physics_properties():
 	last_frame_position = position #get play char position every frame

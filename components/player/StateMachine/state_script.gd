@@ -4,7 +4,7 @@ class_name State
 
 signal transitioned
 
-func enter(char_reference : CharacterBody3D):
+func enter(_char_reference : CharacterBody3D):
 	#enter state
 	pass
 	

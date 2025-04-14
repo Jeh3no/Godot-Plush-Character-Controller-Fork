@@ -54,8 +54,6 @@ shadow_enabled = true
 directional_shadow_max_distance = 20.0
 
 [node name="Player" parent="." instance=ExtResource("1_gygqy")]
-in_air_move_speed = null
-in_air_accel = null
 
 [node name="Ground" type="StaticBody3D" parent="."]
 collision_layer = 2

@@ -14,8 +14,15 @@ var zoom_val : float = 8.0
 @export var min_zoom_val : float
 @export var zoom_speed : float
 
+@export_group("Aim variables")
+var cam_aimed : bool = false
+@export var aim_cam_pos : Vector3
+var aim_cam_pos_side : bool = true #false = left, true = right
+
 @export_group("Keybinding variables")
 @export var mouse_mode_action : String = ""
+@export var aim_cam_action : String = ""
+@export var aim_cam_side_action : String = ""
 @export var cam_zoom_in_action : String = ""
 @export var cam_zoom_out_action : String = ""
 
@@ -41,6 +48,12 @@ func _input(event):
 			
 	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED: return
 	
+	if event.is_action_pressed("aim_cam"):
+		cam_aimed = !cam_aimed
+		
+	if event.is_action_pressed("aim_cam_side"):
+		aim_cam_pos_side = !aim_cam_pos_side
+		
 	if event is InputEventMouseMotion: 
 		var viewport_transform: Transform2D = get_tree().root.get_final_transform()
 		var mouse_motion = event.xformed_by(viewport_transform).relative
@@ -49,13 +62,13 @@ func _input(event):
 func _process(delta):
 	var joy_dir = Input.get_vector("pan_left", "pan_right", "pan_up", "pan_down")
 	
-	cam.position = Vector3(0.0, 0.0, zoom_val)
+	if !cam_aimed: cam.position = Vector3(0.0, 0.0, zoom_val)
+	else: cam.position = Vector3(aim_cam_pos.x if aim_cam_pos_side else -aim_cam_pos.x, aim_cam_pos.y, zoom_val)
 	
 	rotate_from_vector(joy_dir * Vector2(1.0, 0.5) * pan_rotation_val * delta)
 	
 	zoom_handling(delta)
 	
-
 func rotate_from_vector(vector : Vector2):
 	if vector.length() == 0: return
 	rotation.y -= vector.x

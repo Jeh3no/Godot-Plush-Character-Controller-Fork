@@ -54,10 +54,6 @@ func input_management():
 		if cR.walk_or_run == "WalkState": cR.walk_or_run = "RunState"
 		elif cR.walk_or_run == "RunState": cR.walk_or_run = "WalkState"
 		
-	if Input.is_action_just_pressed("wave"):
-		if !cR.godot_plush_skin.is_waving(): 
-			transitioned.emit(self, "WaveState")
-		
 	if Input.is_action_just_pressed("ragdoll"):
 		if !cR.godot_plush_skin.ragdoll:
 			transitioned.emit(self, "RagdollState")

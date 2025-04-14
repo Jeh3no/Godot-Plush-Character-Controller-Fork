@@ -49,10 +49,6 @@ func input_management():
 			transitioned.emit(self, "JumpState")
 		transitioned.emit(self, "JumpState")
 		
-	if Input.is_action_just_pressed("wave"):
-		if !cR.wave_on_floor_only and !cR.godot_plush_skin.is_waving(): 
-			transitioned.emit(self, "WaveState")
-		
 	if Input.is_action_just_pressed("ragdoll"):
 		if !cR.godot_plush_skin.ragdoll and !cR.ragdoll_on_floor_only:
 			transitioned.emit(self, "RagdollState")
@@ -76,8 +72,8 @@ func move(delta : float):
 	cR.move_dir = Input.get_vector(cR.moveLeftAction, cR.moveRightAction, cR.moveForwardAction, cR.moveBackwardAction).rotated(-cR.cam_holder.global_rotation.y)
 		
 	if cR.move_dir and !cR.is_on_floor():
-		var in_air_move_speed_val : float = 10.0
-		var in_air_accel_val : float = 5.0
+		var in_air_move_speed_val : float = cR.in_air_move_speed.sample(cR.velocity.length())
+		var in_air_accel_val : float = cR.in_air_accel.sample(cR.velocity.length())
 		
 		cR.velocity.x = lerp(cR.velocity.x, cR.move_dir.x * in_air_move_speed_val, in_air_accel_val * delta)
 		cR.velocity.z = lerp(cR.velocity.z, cR.move_dir.y * in_air_move_speed_val, in_air_accel_val * delta)
