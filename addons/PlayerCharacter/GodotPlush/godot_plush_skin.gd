@@ -5,7 +5,7 @@ extends Node3D
 @onready var animation_tree : AnimationTree = %AnimationTree
 @onready var state_machine : AnimationNodeStateMachinePlayback = animation_tree.get("parameters/StateMachine/playback")
 
-@export var ragdoll : bool = false : set = set_ragdoll
+var ragdoll : bool = false : set = set_ragdoll
 var squash_and_stretch = 1.0 : set = set_squash_and_stretch
 
 signal footstep(intensity : float)
