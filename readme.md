@@ -83,5 +83,8 @@ you need to create a input action in your project for each action, and then type
 
 # **Credits**
 
+Gtibo for the original project : https://github.com/gtibo/Godot-Plush-Character
+
+Kenney Prototype Textures, made by Kenney and published on the Godot asset store by Calinou : https://godotengine.org/asset-library/asset/781
 
 Demo Audio: [Kenney](https://kenney.nl/assets/category:Audio?sort=update)
