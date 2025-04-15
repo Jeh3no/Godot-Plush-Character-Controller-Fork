@@ -272,9 +272,9 @@ text = "....."
 label_settings = ExtResource("17_c1i0s")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="DebugHUD"]
-offset_left = 844.0
+offset_left = 920.0
 offset_top = 7.0
-offset_right = 1175.0
+offset_right = 1251.0
 offset_bottom = 105.0
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="DebugHUD/HBoxContainer2"]

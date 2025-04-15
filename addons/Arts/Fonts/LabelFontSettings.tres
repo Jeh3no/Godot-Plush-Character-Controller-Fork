@@ -4,6 +4,6 @@
 
 [resource]
 font = ExtResource("1_qtvfi")
-font_size = 30
+font_size = 25
 outline_size = 5
 outline_color = Color(0, 0, 0, 1)
