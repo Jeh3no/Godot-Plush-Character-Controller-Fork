@@ -125,13 +125,14 @@ func modify_model_orientation(delta : float):
 	
 	#follow mode (model must follow the camera rotation)
 	#if the cam is in angled/aim mode
-	if cam_holder.cam_aimed and follow_cam_pos_when_aimed:
+	if cam_holder.cam_aimed and follow_cam_pos_when_aimed and !godot_plush_skin.ragdoll:
 		#get cam rotation on the y axis (+ PI to invert half circle, and be sure that the model is correctly oriented)
 		dir_target_angle = (cam_holder.cam.global_rotation.y) + PI
 		#rotate the model on the y axis
 		visual_root.rotation.y = rotate_toward(visual_root.rotation.y, dir_target_angle, model_rot_speed * delta)
+	
 	#free mode (the model orientation is independant to the camera one)
-	elif (!cam_holder.cam_aimed or !follow_cam_pos_when_aimed) and move_dir != Vector2.ZERO:
+	if (!cam_holder.cam_aimed or !follow_cam_pos_when_aimed) and move_dir != Vector2.ZERO:
 		#get char move direction
 		dir_target_angle = -move_dir.orthogonal().angle()
 		#rotate the model on the y axis
