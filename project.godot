@@ -124,7 +124,6 @@ aim_cam_side={
 
 3d_physics/layer_1="playerCharacter"
 3d_physics/layer_2="structures"
-3d_physics/layer_3="balls"
 
 [physics]
 
