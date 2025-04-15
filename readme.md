@@ -18,7 +18,7 @@ Each state has his own script, allowing to easly filter and manage the communica
 
 He is also very customizable, with a whole set of open variables for every state and for more general stuff. This is the same for the camera.
 
-The asset is 100% written in GDScript.
+The asset is 100% written in GDScript, with the snake case convention.
 
 He works perfectly on Godot 4.4, and should also works wells on the others 4.x versions (4.3, 4.2, 4.1, 4.0), but you will have to remove the uid files.
 
@@ -51,11 +51,9 @@ He works perfectly on Godot 4.4, and should also works wells on the others 4.x v
 # **Purpose**
 
 
-At start, i just wanted to rework my FPS controller template, make an alternate version of it, closer to the finite state machine approach.
+I saw the Godot plush project bu Gtibo about 1,5 weeks, and i told to myself "hey, that would be a great start point for a third person controller !"
 
-But while i was working on it, i said to myself "why not share it with the community, when it's ready ?".
-
-And so here we go !
+And so, here we go !
 
 
 # **How to use**
@@ -69,7 +67,7 @@ You will see for the player character script (and in the camera script) a keybin
 
 you need to create a input action in your project for each action, and then type the exact same name into the corresponding input action variable
 
-(for example : name your move forward action "moveForward", and then type "moveForward" into the variable "moveForwardAction").
+(for example : name your move forward action "move_forward", and then type "move_forward" into the variable "move_forward_action").
 
 
 # **Requets**
@@ -83,8 +81,5 @@ you need to create a input action in your project for each action, and then type
 
 # **Credits**
 
-
-
-Godot Theme prototype Textures, by PiCode : https://godotengine.org/asset-library/asset/2480
 
 Demo Audio: [Kenney](https://kenney.nl/assets/category:Audio?sort=update)
