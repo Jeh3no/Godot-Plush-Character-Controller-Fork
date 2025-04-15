@@ -1,6 +1,6 @@
 A simple and complete third person controller asset, made in Godot 4.
 
-![preview.png](https://github.com/Jeh3no/Godot-Plush-Character-Controller-Fork/blob/main/addons/Arts/Images/preview.png)
+![preview.png](https://github.com/Jeh3no/Godot-State-Machine-Third-Person-Controller/blob/main/addons/Arts/Images/preview.png?raw=true)
 
 
 # **General**
