@@ -37,7 +37,7 @@ He works perfectly on Godot 4.4, and should also works wells on the others 4.x v
  - Coyote jump/time
  - Air control (easely customizable thanks to curves)
  - Ragdoll
-   
+ - 
  - Default/Free camera
  - Aim/Shooter/Above shoulder camera (with left and right sides)
  - Camera pan
