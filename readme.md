@@ -6,7 +6,9 @@ A simple and complete third person controller asset, made in Godot 4.
 # **General**
 
 
-This asset provides a simple, fully commented, finite state machine based controller, camera, as well as a properties HUD.
+This asset is a heavely modified fork of Gtibo's Godot-Plush-Character project (https://github.com/gtibo/Godot-Plush-Character).
+
+It provides a simple, fully commented, finite state machine based controller, camera, as well as a properties HUD.
 
 A test map is provided to test the controller.
 
